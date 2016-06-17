@@ -1,4 +1,5 @@
 #!/bin/bash
+yum clean all
 yum -y update
 yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp
 
