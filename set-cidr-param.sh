@@ -4,7 +4,7 @@ set -eu
 hash jq || yum -y install jq
 cidr=$(curl -L -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$(curl -L -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)subnet-ipv4-cidr-block)
 tmpfile=`mktemp`
-tmpfile2=`mktmp`
+tmpfile2=`mktemp`
 json='/opt/local/amimoto.json'
 if [ -f /opt/local/amimoto-managed.json ]; then
   json='/opt/local/amimoto-managed.json'
