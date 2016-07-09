@@ -1,9 +1,14 @@
 #!/bin/bash -x
 : update packages
+rm -f  /etc/yum.repos.d/amimoto-nginx-mainline.repo
+rm -f  /etc/yum.repos.d/opsrock-*.repo
+rm -f  /etc/yum.repos.d/remi*.repo
+rm -f  /etc/yum.repos.d/Percona.repo
 yum clean all
 yum -y update
 yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp
 
+hash wget || yum -y install wget
 hash jq || yum -y install jq
 hash git || yum -y install git
 
