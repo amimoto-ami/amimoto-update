@@ -15,7 +15,7 @@ AMIMOTO_JSON='/opt/local/amimoto.json'
 /bin/rm -rf /usr/share/phpMyAdmin*
 /bin/rpm --rebuilddb
 /usr/bin/yum -y update
-/usr/bin/yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp
+/usr/bin/yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp --skip-broken
 
 hash wget || /usr/bin/yum -y install wget
 hash jq   || /usr/bin/yum -y install jq
@@ -56,7 +56,7 @@ rm -f /usr/bin/wp; rm -f /usr/local/bin/wp; rm -rf /usr/share/wp-cli/
 /sbin/service monit stop
 /sbin/service php-fpm stop
 /sbin/service mysql stop
-/usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd*
+/usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd* hhvm*
 [ -f /usr/bin/python2.7 ] && \
   /usr/sbin/alternatives --set python /usr/bin/python2.7
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error

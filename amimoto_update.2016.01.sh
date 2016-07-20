@@ -16,7 +16,7 @@ AMIMOTO_JSON='/opt/local/amimoto.json'
 /bin/rm -rf /usr/share/phpMyAdmin*
 /bin/rpm --rebuilddb
 /usr/bin/yum -y update
-/usr/bin/yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp
+/usr/bin/yum -y install --disablerepo=amzn-main --enablerepo=epel libwebp --skip-broken
 
 hash wget || /usr/bin/yum -y install wget
 hash jq   || /usr/bin/yum -y install jq
