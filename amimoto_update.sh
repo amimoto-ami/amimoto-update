@@ -1,6 +1,7 @@
 #!/bin/bash -x
 AMIMOTO_JSON='/opt/local/amimoto.json'
-[ -f /opt/local/amimoto-managed.json ] && AMIMOTO_JSON='/opt/local/amimoto-managed.json'
+[ -f /opt/local/amimoto-managed.json ] && \
+  AMIMOTO_JSON='/opt/local/amimoto-managed.json'
 
 : update packages
 /usr/bin/yum clean all
@@ -21,17 +22,21 @@ hash jq   || /usr/bin/yum -y install jq
 hash git  || /usr/bin/yum -y install git
 
 : update chef-solo recipes
-[ ! -e /opt/local ] && mkdir -p /opt/local
+[ ! -e /opt/local ] && \
+  mkdir -p /opt/local
+[ -e /opt/local/chef-repo ] && \
+  rm -rf /opt/local/chef-repo
 cd /opt/local
-[ -e /opt/local/chef-repo ] && rm -rf /opt/local/chef-repo
 /usr/bin/git clone git://github.com/opscode/chef-repo.git
 cd /opt/local/chef-repo/cookbooks/
 /usr/bin/git clone git://github.com/Launch-with-1-Click/lw1-amimoto.git amimoto
 
 cd /opt/local
-[ ! -f /opt/local/solo.rb ] && echo 'file_cache_path "/tmp/chef-solo"
+[ ! -f /opt/local/solo.rb ] && \
+  echo 'file_cache_path "/tmp/chef-solo"
 cookbook_path ["/opt/local/chef-repo/cookbooks"]' > /opt/local/solo.rb
-[ ! -f /opt/local/amimoto.json ] && cp /opt/local/chef-repo/cookbooks/amimoto/amimoto.json /opt/local/amimoto.json
+[ ! -f /opt/local/amimoto.json ] && \
+  cp /opt/local/chef-repo/cookbooks/amimoto/amimoto.json /opt/local/amimoto.json
 /usr/bin/curl -s https://raw.githubusercontent.com/amimoto-ami/amimoto-update/master/set-cidr-param.sh | /bin/bash
 
 : install chef-solo
@@ -52,7 +57,8 @@ rm -f /usr/bin/wp; rm -f /usr/local/bin/wp; rm -rf /usr/share/wp-cli/
 /sbin/service php-fpm stop
 /sbin/service mysql stop
 /usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd*
-[ -f /usr/bin/python2.7 ] && /usr/sbin/alternatives --set python /usr/bin/python2.7
+[ -f /usr/bin/python2.7 ] && \
+  /usr/sbin/alternatives --set python /usr/bin/python2.7
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error
 /usr/bin/yum -y update
 /opt/local/provision
@@ -68,3 +74,5 @@ rm -f /usr/bin/wp; rm -f /usr/local/bin/wp; rm -rf /usr/share/wp-cli/
 /sbin/service mysql restart
 /sbin/service php-fpm restart
 /sbin/service monit start
+
+cat /etc/motd

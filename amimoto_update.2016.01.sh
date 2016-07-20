@@ -67,3 +67,5 @@ fi
 /sbin/service mysql restart
 /sbin/service php-fpm restart
 /sbin/service monit start
+
+cat /etc/motd
