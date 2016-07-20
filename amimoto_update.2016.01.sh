@@ -27,6 +27,7 @@ hash git  || /usr/bin/yum -y install git
   mkdir -p /opt/local
 [ -e /opt/local/chef-repo ] && \
   rm -rf /opt/local/chef-repo
+cd /opt/local
 /usr/bin/git clone git://github.com/opscode/chef-repo.git
 cd /opt/local/chef-repo/cookbooks/
 /usr/bin/git clone git://github.com/Launch-with-1-Click/lw1-amimoto.git amimoto
