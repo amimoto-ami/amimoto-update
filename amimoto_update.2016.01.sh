@@ -55,6 +55,7 @@ if [ "${INSTANCE_TYPE}" = "micro" ]; then
 else
   /sbin/service monit stop
 fi
+usr/bin/yum remove -y php54-* php55-* php56-* hhvm*
 [ -f /usr/bin/python2.7 ] && \
   /usr/sbin/alternatives --set python /usr/bin/python2.7
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error
