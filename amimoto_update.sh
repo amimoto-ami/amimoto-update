@@ -37,7 +37,6 @@ cd /opt/local
 cookbook_path ["/opt/local/chef-repo/cookbooks"]' > /opt/local/solo.rb
 [ ! -f /opt/local/amimoto.json ] && \
   cp /opt/local/chef-repo/cookbooks/amimoto/amimoto.json /opt/local/amimoto.json
-/usr/bin/curl -s https://raw.githubusercontent.com/amimoto-ami/amimoto-update/master/set-cidr-param.sh | /bin/bash
 
 : install chef-solo
 /usr/bin/curl -L -s http://www.opscode.com/chef/install.sh | /bin/bash
