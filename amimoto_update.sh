@@ -55,7 +55,7 @@ rm -f /usr/bin/wp; rm -f /usr/local/bin/wp; rm -rf /usr/share/wp-cli/
 /sbin/service monit stop
 /sbin/service php-fpm stop
 /sbin/service mysql stop
-/usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd* hhvm*
+/usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd* hhvm* nginx nginx-*
 [ -f /usr/bin/python2.7 ] && \
   /usr/sbin/alternatives --set python /usr/bin/python2.7
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error
