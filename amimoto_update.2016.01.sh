@@ -1,5 +1,7 @@
 #!/bin/bash -x
+
 INSTANCE_TYPE=$(curl -s http://169.254.169.254/latest/meta-data/instance-type | sed -e 's/^[^\.]*\.//g')
+TMP_JSON=$(mktemp)
 AMIMOTO_JSON='/opt/local/amimoto.json'
 [ -f /opt/local/amimoto-managed.json ] && \
   AMIMOTO_JSON='/opt/local/amimoto-managed.json'
@@ -47,6 +49,10 @@ echo "#!/bin/bash
 /usr/bin/git -C /opt/local/chef-repo/cookbooks/amimoto pull origin 2016.01
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error" > /opt/local/provision
 chmod +x /opt/local/provision
+
+: Update AMIMOTO Config
+jq '.phpfpm = "72"' ${AMIMOTO_JSON} > ${TMP_JSON}
+mv -f ${TMP_JSON} ${AMIMOTO_JSON}
 
 : update Nginx, PHP, MySQL...
 if [ "${INSTANCE_TYPE}" = "micro" ]; then

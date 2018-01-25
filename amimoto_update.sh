@@ -1,7 +1,4 @@
 #!/bin/bash -x
-
-INSTANCE_TYPE=$(curl -s http://169.254.169.254/latest/meta-data/instance-type | sed -e 's/^[^\.]*\.//g')
-TMP_JSON=$(mktemp)
 AMIMOTO_JSON='/opt/local/amimoto.json'
 [ -f /opt/local/amimoto-managed.json ] && \
   AMIMOTO_JSON='/opt/local/amimoto-managed.json'
@@ -41,8 +38,9 @@ cookbook_path ["/opt/local/chef-repo/cookbooks"]' > /opt/local/solo.rb
 [ ! -f /opt/local/amimoto.json ] && \
   cp /opt/local/chef-repo/cookbooks/amimoto/amimoto.json /opt/local/amimoto.json
 
-[ -f /opt/local/provision ] && \
-  cp /opt/local/provision /opt/local/provision.org
+: install chef-solo
+/usr/bin/curl -L -s http://www.opscode.com/chef/install.sh | /bin/bash
+
 echo "#!/bin/bash
 /sbin/service monit stop
 [ -f /usr/bin/python2.7 ] && /usr/sbin/alternatives --set python /usr/bin/python2.7
@@ -50,22 +48,24 @@ echo "#!/bin/bash
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error" > /opt/local/provision
 chmod +x /opt/local/provision
 
-: Update AMIMOTO Config
-jq '.phpfpm = "72"' ${AMIMOTO_JSON} > ${TMP_JSON}
-mv -f ${TMP_JSON} ${AMIMOTO_JSON}
+: remove old wp-cli
+rm -f /usr/bin/wp; rm -f /usr/local/bin/wp; rm -rf /usr/share/wp-cli/
 
 : update Nginx, PHP, MySQL...
-if [ "${INSTANCE_TYPE}" = "micro" ]; then
-  /sbin/service monit stop && /sbin/service nginx stop && /sbin/service php-fpm stop && /sbin/service mysql stop
-else
-  /sbin/service monit stop
-fi
-usr/bin/yum remove -y php54-* php55-* php56-* hhvm*
+/sbin/service monit stop
+/sbin/service php-fpm stop
+/sbin/service mysql stop
+/usr/bin/yum remove -y php php54-* php55-* php56-* php-* Percona-* httpd* hhvm* nginx nginx-*
 [ -f /usr/bin/python2.7 ] && \
   /usr/sbin/alternatives --set python /usr/bin/python2.7
 /opt/chef/bin/chef-solo -c /opt/local/solo.rb -j ${AMIMOTO_JSON} -l error
 /usr/bin/yum -y update
 /opt/local/provision
+
+: upgrade MySQL DB
+/usr/bin/mysql_upgrade -u root
+#/usr/bin/curl -L -s http://bugs.mysql.com/file.php?id=19725\&bug_id=67179\&text=1 > innodb_stats_fix.sql
+#/usr/bin/mysql -u root mysql < innodb_stats_fix.sql
 
 : service restart
 /sbin/service monit stop
