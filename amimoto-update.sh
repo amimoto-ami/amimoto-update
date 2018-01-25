@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 TMP_JSON=$(mktemp)
 AMIMOTO_JSON='/opt/local/amimoto.json'
