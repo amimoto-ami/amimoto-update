@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
 TMP_JSON=$(mktemp)
-AMIMOTO_JSON=$(cat /opt/local/amimoto.json)
+AMIMOTO_JSON='/opt/local/amimoto.json'
 git -C /opt/local/chef-repo/cookbooks/amimoto/ pull origin 2016.01
-jq -s '.[0] * .[1]' <(echo '{"phpfpm":{"version":"72"}}') <(echo $AMIMOTO_JSON) > /opt/local/amimoto.json
+jq '.phpfpm = "72"' /opt/local/amimoto.json > ${TMP_JSON}
 mv -f ${TMP_JSON} /opt/local/amimoto.json
