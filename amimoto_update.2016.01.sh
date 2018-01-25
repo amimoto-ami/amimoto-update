@@ -51,7 +51,7 @@ echo "#!/bin/bash
 chmod +x /opt/local/provision
 
 : Update AMIMOTO Config
-jq '.phpfpm = "72"' ${AMIMOTO_JSON} > ${TMP_JSON}
+jq '.phpfpm.version="72" | .phpfpm.enabled=true' ${AMIMOTO_JSON} > ${TMP_JSON}
 mv -f ${TMP_JSON} ${AMIMOTO_JSON}
 
 : update Nginx, PHP, MySQL...
