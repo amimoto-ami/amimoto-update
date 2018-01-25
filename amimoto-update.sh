@@ -52,6 +52,7 @@ chmod +x /opt/local/provision
 
 : Update AMIMOTO Config
 jq '.phpfpm = "72"' ${AMIMOTO_JSON} > ${TMP_JSON}
+mv -f ${TMP_JSON} /opt/local/amimoto.json
 
 : update Nginx, PHP, MySQL...
 if [ "${INSTANCE_TYPE}" = "micro" ]; then
